@@ -245,12 +245,10 @@ impl Client {
         vector: impl std::fmt::Display,
         start: i64,
         end: i64,
-        step: &str,
+        step: Option<&str>,
         timeout: Option<&str>,
     ) -> Result<QueryResultType, Error> {
         let url = format!("{}/query_range", self.base_url);
-
-        validate_duration(step)?;
 
         let query = vector.to_string();
         let start = start.to_string();
@@ -260,8 +258,11 @@ impl Client {
             ("query", query.as_str()),
             ("start", start.as_str()),
             ("end", end.as_str()),
-            ("step", step),
         ];
+        if let Some(step) = step {
+            validate_duration(step)?;
+            params.push(("step",step));
+        }
 
         if let Some(t) = timeout {
             validate_duration(t)?;

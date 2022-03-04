@@ -54,7 +54,7 @@ fn test_query_3() {
 
     let response = tokio_test::block_on(async {
         client
-            .query_range(s, 1623345960, 1623841309, "5m", None)
+            .query_range(s, 1623345960, 1623841309, Some("5m"), None)
             .await
             .unwrap()
     });
